@@ -1,0 +1,119 @@
+#include <iostream>
+using namespace std;
+
+
+struct stack {
+    char items[50];
+    int top;
+};
+
+
+void initStack(struct stack *ps);
+int stack_is_empty(struct stack *ps); 
+int is_full(struct stack *ps);
+void push(struct stack *ps, char x);
+char pop(struct stack *ps);
+char top_of_the_stack(struct stack *ps);
+int matching(char, char);
+void printstack(struct stack *ps);
+
+int main(void) {
+    int valid = 1, i = 0;
+    char eq[20], symb, x;
+    struct stack s;
+    initStack(&s);
+
+    cout << "Please enter the equation:";
+    cin >> eq;
+
+    while (eq[i] != '\0') {
+        symb = eq[i];
+        if (symb == '(' || symb == '[' || symb == '{')
+            push(&s, symb);
+        if (symb == ')' || symb == ']' || symb == '}') {
+            if (stack_is_empty(&s)) // Updated function name
+                valid = 0;
+            else {
+                x = pop(&s);
+                if (matching(symb, x) == 0)
+                    valid = 0;
+            }
+        }
+        //cout << "stack after symb " << symb << " is as follows:" << endl;
+        //printstack(&s);
+        i++;
+    }
+
+    if (!stack_is_empty(&s)) 
+        valid = 0;
+
+    if (valid)
+        cout << "\n\nString is valid\n\n";
+    else
+        cout << "\n\nString is not valid (invalid)\n\n";
+
+    return 0;
+}
+
+int matching(char symb, char x) {
+    if ((x == '(' && symb == ')') || (x == '[' && symb == ']') || (x == '{' && symb == '}'))
+        return 1;
+    else
+        return 0;
+}
+
+char top_of_the_stack(struct stack *ps) {
+    return ps->items[ps->top];
+}
+
+void printstack(struct stack *ps) {
+    char x;
+    struct stack temp;
+    initStack(&temp);
+
+    while (!stack_is_empty(ps)) { 
+        x = pop(ps);
+        cout << x;
+        push(&temp, x);
+    }
+    while (!stack_is_empty(&temp)) { 
+        x = pop(&temp);
+        push(ps, x);
+    }
+    cout << "\n\n";
+}
+
+void initStack(struct stack *ps) {
+    ps->top = -1;
+}
+
+int stack_is_empty(struct stack *ps) { 
+    if (ps->top == -1)
+        return 1;
+    else
+        return 0;
+}
+
+int is_full(struct stack *ps) {
+    if (ps->top == 49)
+        return 1;
+    else
+        return 0;
+}
+
+void push(struct stack *ps, char x) {
+    if (is_full(ps)) {
+        cout << "Overflow: Stack is full";
+        exit(1);
+    }
+    ps->top++;
+    ps->items[ps->top] = x;
+}
+
+char pop(struct stack *ps) {
+    if (stack_is_empty(ps)) { 
+        cout << "Underflow: Stack is empty";
+        exit(1);
+    }
+    return ps->items[(ps->top)--];
+}
