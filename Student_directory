@@ -1,0 +1,296 @@
+#include <iostream>
+#include <cstring>
+
+
+using namespace std;
+void addnewst();
+void deletest();
+void list();
+void searchbyid();
+void searchbyname();
+void update();
+void sort();
+void sortbyid();
+void sortbyname();
+void sortbyear();
+void maxcgpa();
+void swap(int*a, int*b);
+void swap1(string*a, string*b);
+int compareByName();
+
+struct date{
+	int day,month,year;
+	
+};
+struct student{
+	int std_id;
+	char std_name[20],std_surname[20];
+	struct date reg_date;
+	float cgpa;
+	
+}student_directory[100];
+
+int size=0;
+
+int main(void){
+	int choice;
+	 do{
+	 {
+	
+
+	cout<<"MENU"<<endl;
+	cout<<"1- Add a new student to directory"<<endl;
+	cout<<"2_Delete a student from the directory"<<endl;
+	cout<<"3- List available students" <<endl;
+	cout<<"4- Search a student"<<endl;
+	cout<<"5-Update student information"<<endl;
+	cout<<"6-Sort the list"<<endl;
+	cout<<"7- Display the student information holding max. cgpa"<<endl;
+	cout<<"8- Quit"<<endl;
+	cout<<endl;
+	cout<<"insert your choice: ";
+	cin>>choice;
+	
+	switch(choice){
+	case 1: addnewst();
+	break;
+	
+	case 2:deletest();
+	break;
+	
+	case 3:list();
+	break;
+	
+	case 4:{
+	
+	cout<<"1-Search student by id"<<endl;
+	cout<<"2-Seach student by name"<<endl;
+	cout<<"Enter your choice: ";
+	int Schoice;
+	cin>>Schoice;
+	switch(Schoice){
+		case 1: 
+			searchbyid();
+		break;
+		case 2: searchbyname();
+		break;
+		default:
+			cout<<"not valid!";
+	}}
+	break;
+	
+	case 5:
+		update();
+		break;
+	case 6:
+		sort();
+		break;
+	case 7: 
+		maxcgpa();
+		break;
+	case 8: cout<<"exiting";
+	break;
+	default:
+		cout<<"invalid choice!";
+} } }while(choice!=8);
+
+	return 0;
+}
+
+void addnewst(){
+	if(size<100)
+	{
+		cout<<"enter information: "<<endl;
+		cout<<"id: "<<endl;
+		cin>>student_directory[size].std_id;
+		cout<<"name: "<<endl;
+		cin>>student_directory[size].std_name;
+		cout<<"surname: "<<endl;
+		cin>>student_directory[size].std_surname;
+		cout<<"date of registration: (dd/mm/yyyy) "<<endl;
+		cin>>student_directory[size].reg_date.day
+		>>student_directory[size].reg_date.month
+		>>student_directory[size].reg_date.year;
+		cout<<"CGPA: ";
+		cin>>student_directory[size].cgpa;
+		size++;
+		cout<<"student added!"<<endl;
+	}else{
+		cout<<"student not added!"<<endl;
+	}
+}
+
+
+
+void deletest()
+{
+    int id;
+    cout << "enter student id you wish to delete: ";
+    cin >> id;
+    int i;
+    for (i = 0; i < size; i++)
+    {
+        if (student_directory[i].std_id == id)
+            break;
+    }
+    if (i == size)
+    {
+        cout << "Student not found\n";
+        return;
+    }
+    for (int j = i; j < size - 1; j++)
+        student_directory[j] = student_directory[j + 1];
+    size--;
+}
+
+
+void list(){
+	if(size>0){
+		for(int i=0;i<size;i++){
+		
+		cout << "Student ID: " << student_directory[i].std_id << "\n";
+        cout << "Student Name: " << student_directory[i].std_name << "\n";
+        cout << "Student Surname: " << student_directory[i].std_surname << "\n";
+        cout << "Registration Date: " << student_directory[i].reg_date.day << "-" << student_directory[i].reg_date.month << "-" << student_directory[i].reg_date.year << "\n";
+        cout << "CGPA: " << student_directory[i].cgpa << "\n\n";
+					
+	}
+}
+}
+
+void searchbyid(){
+	int id;
+	cout<<"enter id: "<<endl;
+	cin>>id;
+	for(int i=0;i<size;i++){
+		if(student_directory[i].std_id==id){
+		
+		cout<<"student found!"<<endl;
+				cout << "Student Name: " << student_directory[i].std_name << "\n";
+                cout << "Student Surname: " << student_directory[i].std_surname << "\n";
+                cout << "Registration Date: " << student_directory[i].reg_date.day << "-" << student_directory[i].reg_date.month << "-" << student_directory[i].reg_date.year << "\n";
+                cout << "CGPA: " << student_directory[i].cgpa << "\n\n";
+}
+	else
+	cout<<"student not found!"<<endl;
+}
+}
+
+void searchbyname(){
+	char name[20];
+	cout<<"insert name : "<<endl;
+	cin>>name;
+	for(int i=0;i<size;i++){
+		if(name==student_directory[i].std_name){
+			cout<<"student found!"<<endl;
+				cout << "Student Name: " << student_directory[i].std_name << "\n";
+                cout << "Student Surname: " << student_directory[i].std_surname << "\n";
+                cout << "Registration Date: " << student_directory[i].reg_date.day << "-" << student_directory[i].reg_date.month << "-" << student_directory[i].reg_date.year << "\n";
+                cout << "CGPA: " << student_directory[i].cgpa << "\n\n";
+		
+		}
+	else
+	cout<<"student not found!"<<endl;
+}
+}
+
+
+void update()
+{
+    int id;
+    cout<<"insert id of the student you wish to update information: "<<endl;
+    cin >> id;
+    int i;
+    for (i = 0; i < size; i++)
+    {
+        if (student_directory[i].std_id == id)
+            break;
+    }
+    if (i == size)
+    {
+        cout << "Student not found\n";
+        return;
+    }
+    cout<<"enter updated name: "<<endl;
+    cin >> student_directory[i].std_name;
+    cout<<"enter updated surname: "<<endl;
+    cin >> student_directory[i].std_surname;
+    cout<<"enter updated reg date: "<<endl;
+    cin >> student_directory[i].reg_date.day 
+	>> student_directory[i].reg_date.month 
+	>> student_directory[i].reg_date.year;
+    cout << "Enter new CGPA: ";
+    cin >> student_directory[i].cgpa;
+    cout<<"student information updated!"<<endl;
+}
+
+void swap(int*a, int*b){
+	int temp;
+	temp= *a;
+	*a=*b;
+	*b= temp;
+}
+
+void swap1(string*a, string*b){
+	string temp;
+	temp= *a;
+	*a=*b;
+	*b= temp;
+}
+
+int compareByName(const void* a, const void* b) {
+    return strcmp(((student*)a)->std_name, ((student*)b)->std_name);
+}
+
+void sort(){
+    int choice;
+    cout << "1. Sort by ID\n2. Sort by name\n3. Sort by registration year\nEnter choice: ";
+    cin >> choice;
+    if (choice == 1)
+    {
+        for(int i=1;i<size;i++){
+		for(int j=0;j<size-i;j++){
+			if(student_directory[j].std_id>student_directory[j+1].std_id){
+				swap(&student_directory[j].std_id,&student_directory[j+1].std_id);
+			}
+		}
+	}
+    }
+    
+   else if (choice == 2)
+   {
+    qsort(student_directory, size, sizeof(student), compareByName);
+    }
+
+
+    else if (choice == 3)
+    {
+        for(int i=1;i<size;i++){
+		for( int j=0;j<size-i;j++){
+			if(student_directory[j].reg_date.year>student_directory[j+1].reg_date.year){
+				swap(&student_directory[j].reg_date.year,&student_directory[j+1].reg_date.year);
+			}
+		}
+	}
+    }
+    
+}
+
+
+void maxcgpa()
+{
+    int max_index = 0;
+    for (int i = 1; i < size; i++)
+    {
+        if (student_directory[i].cgpa > student_directory[max_index].cgpa)
+            max_index = i;
+    }
+    cout << "Student with max CGPA:\n";
+    cout << "Student ID: " << student_directory[max_index].std_id << "\n";
+    cout << "Student Name: " << student_directory[max_index].std_name << "\n";
+    cout << "Student Surname: " << student_directory[max_index].std_surname << "\n";
+    cout << "Registration Date: " << student_directory[max_index].reg_date.day << "-" 
+	<< student_directory[max_index].reg_date.month << "-" 
+	<< student_directory[max_index].reg_date.year << "\n";
+    cout << "CGPA: " << student_directory[max_index].cgpa << "\n\n";
+}
