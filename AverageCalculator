@@ -1,0 +1,24 @@
+void copystackky (struct stack *a, struct stack *b,struct stack *c){
+	
+	struct stack temp1, temp2, temp3;
+	initializeStack(&temp1);
+	initializeStack(&temp2);
+	initializeStack(&temp3);
+
+	while(!isStackEmty(a)){
+		int x = pop(a);
+		int y = pop(b);
+		push(&temp1, x);
+		push(&temp2, y);
+		push(&temp3,avg(x,y));
+	}
+	
+	while(!isStackEmty(&temp1)){
+		int x = pop(&temp1);
+		push(a,x);
+		int y = pop(&temp2);
+		push(b,y);
+		int z = pop(&temp3);
+		push(c,z);
+	}
+}
