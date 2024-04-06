@@ -1,0 +1,32 @@
+void copystack (struct stack *a, struct stack *b){
+	
+	struct stack temp;
+	initializeStack(&temp);
+	
+	while(!isStackEmty(a)){
+		int x = pop(a);
+		push(&temp, x);
+	}
+	
+	while(!isStackEmty(&temp)){
+	int x = pop(&temp);
+	push(a, x);
+	push(b, x);
+	}
+	
+}
+void copyReverse (struct stack *a, struct stack *b){
+	struct stack temp;
+	initializeStack(&temp);
+	
+	while(!isStackEmty(a)){
+		int x = pop(a);
+		push(&temp, x);
+		push(b, x);
+	}
+	
+	while(!isStackEmty(&temp)){
+	int x = pop(&temp);
+	push(a, x);
+	}
+}
