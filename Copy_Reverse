@@ -30,3 +30,126 @@ void copyReverse (struct stack *a, struct stack *b){
 	push(a, x);
 	}
 }
+
+
+
+//
+full program
+#include <iostream>
+using namespace std;
+#define STACKSIZE 3
+struct stack
+{
+  int top;
+  int items[STACKSIZE];
+};
+
+void initializeStack(struct stack *);
+int isStackFull(struct stack *);
+void push(struct stack *, int);
+int isStackEmty(struct stack *);
+int pop(struct stack *);
+void printStack(struct stack *);
+void copyReverse (struct stack *, struct stack *);
+
+int main(void)
+{
+	struct stack a, b;
+	initializeStack (&a);
+	initializeStack (&b);
+	push(&a,12);
+	push(&a,5);
+	push(&a,18);
+	printStack(&a);
+	printStack(&b);
+	cout<<endl<<"Copy Process"<<endl;
+	copyReverse (&a, &b);
+	cout<<endl;
+	printStack(&a);
+	cout<<endl;
+	printStack(&b);
+	
+    return 0;
+}
+
+
+void initializeStack(struct stack *ps)
+{  ps->top = - 1; }
+
+int isStackFull(struct stack *ps)
+{
+   if(ps->top == STACKSIZE-1) 
+     return 1; 
+   else 
+     return 0; 
+}
+
+void push(struct stack *ps, int x)
+{
+   if(isStackFull(ps))		
+   {
+     cout<<"Overflow: Stack is full\n";
+     exit(1);
+   }
+   ps->top++;
+   ps->items[ps->top]=x;
+}
+
+int isStackEmty(struct stack *ps)
+{
+   if(ps->top == -1)
+     return 1; 
+   else
+     return 0; 
+}
+
+int pop(struct stack *ps)
+{
+	if(isStackEmty(ps)==1)	
+	{
+		cout<<"Underflow: Stack is empty\n";
+		exit(1);
+	}
+	return ps->items[(ps->top)--];
+}
+
+void printStack(struct stack *ps){
+	
+	struct stack temp;
+	initializeStack(&temp);
+	if(isStackEmty(ps)){
+		cout<<"Stack is Empty!";
+	}
+	while(!isStackEmty(ps)){
+		
+		int x=pop(ps);
+		
+		cout<<x<<endl;
+		push(&temp,x);
+	}
+	
+	while(!isStackEmty(&temp)){
+		
+		int x=pop(&temp);
+		push(ps,x);
+	}
+	
+}
+
+
+
+void copyReverse (struct stack *a, struct stack *b){
+	struct stack temp;
+	initializeStack(&temp);
+	
+	while(!isStackEmty(a)){
+		int x = pop(a);
+		push(&temp, x);
+		push(b, x);
+	}
+	
+	while(!isStackEmty(&temp)){
+	int x = pop(&temp);
+	push(a, x);
+	}
+}
