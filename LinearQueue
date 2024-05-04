@@ -1,5 +1,5 @@
 #include <iostream>
-#define QUEUE_SIZE 20
+#define QUEUE_SIZE 10
 using namespace std;
 
 struct LinearQueue
