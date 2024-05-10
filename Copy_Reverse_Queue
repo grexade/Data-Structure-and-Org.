@@ -1,0 +1,212 @@
+#include <iostream>
+#define QUEUE_SIZE 7
+#define STACKSIZE 7
+using namespace std;
+
+struct CircularQueue
+{
+    int front;
+    int rear;
+    int items[QUEUE_SIZE];
+};
+
+struct stack
+{
+  int top;
+  int items[STACKSIZE];
+};
+
+void initializeStack(struct stack *);
+int isStackFull(struct stack *);
+void push(struct stack *, int);
+int isStackEmty(struct stack *);
+int pop(struct stack *);
+
+void initializeQueue(struct CircularQueue *);
+int isQueueEmpty(struct CircularQueue *);
+int isQueueFull(struct CircularQueue *);
+void insert(struct CircularQueue *, int);
+int remove(struct CircularQueue *);
+void display(struct CircularQueue *);
+void copyqueue(struct CircularQueue *, struct CircularQueue *);
+void revcopyqueue(struct CircularQueue *, struct CircularQueue *);
+
+
+int main()
+{
+    struct CircularQueue cq;
+    initializeQueue(&cq);
+    
+    struct CircularQueue sat;
+    initializeQueue(&sat);
+    
+    insert(&cq, 3);
+    insert(&cq, 5);
+    insert(&cq, 16);
+    insert(&cq, 2);
+    insert(&cq, 8);
+	
+	revcopyqueue(&cq, &sat);
+	
+	
+    display(&cq);
+    cout<<endl;
+    display(&sat);
+    
+    
+    return 0;
+}
+
+void initializeQueue(struct CircularQueue *c)
+{ c->front = c->rear = QUEUE_SIZE -1;}
+
+int isQueueEmpty(struct CircularQueue *c)
+{
+    if (c->front == c->rear)
+        return 1;
+	else
+        return 0;
+}
+
+int isQueueFull(struct CircularQueue *c)
+{
+    if (c->front == c->rear)
+        return 1;
+	else
+        return 0;
+}
+
+void insert(struct CircularQueue *c, int x)
+{
+    if(c->rear == QUEUE_SIZE-1)
+        c->rear=0;
+    else
+        (c->rear)++;
+
+	if(isQueueFull(c))
+        cout<<"Overflow: Queue is full"<<endl;
+	else
+    c->items[c->rear]=x;
+}
+
+int remove(struct CircularQueue *c)
+{
+    if (isQueueEmpty(c))
+        cout << "Underflow: Queue is empty" << endl;
+    else
+	{
+        if (c->front == QUEUE_SIZE -1)
+            c->front = 0;
+        else
+            (c->front)++;
+        int x = c->items[(c->front)];
+        c->items[(c->front)] = 0;
+        return x;
+    }
+}
+
+void initializeStack(struct stack *ps)
+{  ps->top = - 1; }
+
+int isStackFull(struct stack *ps)
+{
+   if(ps->top == STACKSIZE-1) 
+     return 1; 
+   else 
+     return 0; 
+}
+
+void push(struct stack *ps, int x)
+{
+   if(isStackFull(ps))		
+   {
+     cout<<"Overflow: Stack is full\n";
+     exit(1);
+   }
+   ps->top++;
+   ps->items[ps->top]=x;
+}
+
+int isStackEmty(struct stack *ps)
+{
+   if(ps->top == -1)
+     return 1; 
+   else
+     return 0; 
+}
+
+int pop(struct stack *ps)
+{
+	if(isStackEmty(ps)==1)	
+	{
+		cout<<"Underflow: Stack is empty\n";
+		exit(1);
+	}
+	return ps->items[(ps->top)--];
+}
+
+
+void display(struct CircularQueue *l){
+	int x;
+	struct CircularQueue temp;
+	initializeQueue(&temp);
+	while(!isQueueEmpty(l))
+	{
+	x= remove(l);
+	cout<<x<<endl;
+	insert(&temp,x);
+	}
+	while(!isQueueEmpty(&temp))
+	{
+	x= remove(&temp);
+	insert(l,x);
+	}
+
+}
+
+void copyqueue(struct CircularQueue *source, struct CircularQueue *destination){
+	int x;
+	struct CircularQueue temp;
+	initializeQueue(&temp);
+	while(!isQueueEmpty(source))
+	{
+	x= remove(source);
+	insert(&temp,x);
+	}
+	while(!isQueueEmpty(&temp))
+	{
+	x= remove(&temp);
+	insert(source,x);
+	insert(destination,x);
+	}
+}
+
+void revcopyqueue(struct CircularQueue *source, struct CircularQueue *destination) {
+	int x,n;
+	struct CircularQueue temp;
+	initializeQueue(&temp);
+	
+	struct stack a;
+	initializeStack (&a);
+	
+	
+	while(!isQueueEmpty(source))
+	{
+	x= remove(source);
+	push(&a, x);
+	insert(&temp,x);
+	}
+	
+	while(!isQueueEmpty(&temp))
+	{
+	x= remove(&temp);
+	insert(source,x);
+	n = pop(&a);
+	insert(destination,n);
+	}
+	
+}
+
+
+
+
