@@ -1,0 +1,173 @@
+#include <iostream>
+#define QUEUE_SIZE 7
+using namespace std;
+
+struct CircularQueue
+{
+    int front;
+    int rear;
+    int items[QUEUE_SIZE];
+};
+
+void initializeQueue(struct CircularQueue *);
+int isQueueEmpty(struct CircularQueue *);
+int isQueueFull(struct CircularQueue *);
+void insert(struct CircularQueue *, int);
+int remove(struct CircularQueue *);
+void display(struct CircularQueue *);
+void copyqueue(struct CircularQueue *, struct CircularQueue *);
+void summation(struct CircularQueue *, struct CircularQueue *, struct CircularQueue *);
+
+
+int main()
+{
+    struct CircularQueue cq;
+    initializeQueue(&cq);
+    
+    struct CircularQueue kank;
+    initializeQueue(&kank);
+    
+    struct CircularQueue ahm;
+    initializeQueue(&ahm);
+    
+    insert(&cq, 3);
+    insert(&cq, 5);
+    insert(&cq, 16);
+    insert(&cq, 2);
+    insert(&cq, 8);
+	
+	insert(&kank, 50);
+	insert(&kank, 9);
+	insert(&kank, 25);
+	insert(&kank, 54);
+	insert(&kank, 9);
+	
+	
+	summation(&cq, &kank, &ahm);
+	
+	cout<<"Elements in the first Queue:"<<endl;
+    display(&cq);
+    cout<<"Elements in the second Queue:"<<endl;
+    display(&kank);
+    cout<<"Elements in the sum Queue:"<<endl;
+    display(&ahm);
+    return 0;
+}
+
+void initializeQueue(struct CircularQueue *c)
+{ c->front = c->rear = QUEUE_SIZE -1;}
+
+int isQueueEmpty(struct CircularQueue *c)
+{
+    if (c->front == c->rear)
+        return 1;
+	else
+        return 0;
+}
+
+int isQueueFull(struct CircularQueue *c)
+{
+    if (c->front == c->rear)
+        return 1;
+	else
+        return 0;
+}
+
+void insert(struct CircularQueue *c, int x)
+{
+    if(c->rear == QUEUE_SIZE-1)
+        c->rear=0;
+    else
+        (c->rear)++;
+
+	if(isQueueFull(c))
+        cout<<"Overflow: Queue is full"<<endl;
+	else
+    c->items[c->rear]=x;
+}
+
+int remove(struct CircularQueue *c)
+{
+    if (isQueueEmpty(c))
+        cout << "Underflow: Queue is empty" << endl;
+    else
+	{
+        if (c->front == QUEUE_SIZE -1)
+            c->front = 0;
+        else
+            (c->front)++;
+        int x = c->items[(c->front)];
+        c->items[(c->front)] = 0;
+        return x;
+    }
+}
+
+void display(struct CircularQueue *l){
+	int x;
+	struct CircularQueue temp;
+	initializeQueue(&temp);
+	while(!isQueueEmpty(l))
+	{
+	x= remove(l);
+	cout<<x<<endl;
+	insert(&temp,x);
+	}
+	while(!isQueueEmpty(&temp))
+	{
+	x= remove(&temp);
+	insert(l,x);
+	}
+
+}
+
+void copyqueue(struct CircularQueue *source, struct CircularQueue *destination){
+	int x;
+	struct CircularQueue temp;
+	initializeQueue(&temp);
+	while(!isQueueEmpty(source))
+	{
+	x= remove(source);
+	insert(&temp,x);
+	}
+	while(!isQueueEmpty(&temp))
+	{
+	x= remove(&temp);
+	insert(source,x);
+	insert(destination,x);
+	}
+}
+
+void summation(struct CircularQueue *sun, struct CircularQueue *moon, struct CircularQueue *star){
+	int x,n,m;
+	
+	struct CircularQueue temp;
+	initializeQueue(&temp);
+	
+	struct CircularQueue temp2;
+	initializeQueue(&temp2);
+	
+	while(!isQueueEmpty(sun))
+	{
+	x= remove(sun);
+	insert(&temp,x);
+	
+	n= remove(moon);
+	insert(&temp2,n);
+
+	m = x+n;
+	insert(star,m);
+	}
+	while(!isQueueEmpty(&temp))
+	{
+	x= remove(&temp);
+	insert(sun,x);
+	n= remove(&temp2);
+	insert(moon,n);
+	}
+	
+}
+
+
+
+
+
