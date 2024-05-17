@@ -1,0 +1,177 @@
+#include <iostream>
+#include <cstdlib>
+using namespace std;
+struct node
+{
+ int data;
+ struct node *next;
+};
+struct node * createNode(int);
+struct node * insertBack(struct node *, int);
+struct node * insertFront(struct node *, int);
+void insertAfter(struct node *, int);
+void deleteAfter(struct node *);
+struct node *deleteFront(struct node *);
+struct node *deleteBack(struct node *);
+void display(struct node *);
+int sizeofll(struct node *);
+
+int main(void)
+{   
+    //struct node *header = NULL;
+
+   struct node *header;
+header = (struct node *)malloc(sizeof(struct node));
+header->data = 2;
+header->next = (struct node *)malloc(sizeof(struct node));
+header->next->data = 4;
+header->next->next = (struct node *)malloc(sizeof(struct node));
+header->next->next->data = 6;
+header->next->next->next = NULL;
+display(header);
+int count = sizeofll(header);
+cout<<count;
+
+    return 0;
+}
+struct node * createNode(int item)
+{
+     struct node * temp;
+     temp = (struct node *) malloc(sizeof(node));
+     temp->data = item;
+     temp->next = NULL;
+     return temp;
+}
+void deleteAfter(struct node *afterNode)
+{
+    struct node *temp;
+	//If next node of afterNode or afterNode is NULL, 
+	//we cant remove anything
+	if(afterNode->next==NULL || afterNode==NULL)
+        return;
+    //Set temp to next node of afterNode
+    temp =afterNode->next;
+    //Set afterNode's next node to temp's next node.
+    afterNode->next=temp->next;
+    free(temp);
+}
+
+struct node *deleteFront(struct node *header)
+{
+    //Create temp node
+    struct node *temp;
+    //Check if the list is empty
+    if(header==NULL){
+        return header;
+    }
+	//Assign header to temp
+    temp=header;
+    //Point header, to next node
+	header= header->next;
+	//Free temp
+    free(temp);
+    //Return new header
+    return header;
+}
+
+struct node *deleteBack(struct node *header)
+{
+    //Create a temp node (this will hold node that is going to be removed)
+    // Create headertemp node (this node will be used to iterate through nodes, so we can
+    // find the last node.
+    struct node *temp, *headertemp;
+    //Check if list is empty
+    if(header==NULL){
+        return header;
+    }
+    //Assign header to headertemp
+	headertemp=header;
+    //Iterate through the list and set headertemp to last node.
+	while(headertemp->next->next!=NULL){
+        headertemp =headertemp->next;
+	}
+    //assign header temp's next node to temp (which is the node before end node)
+	temp=headertemp->next;
+	//set next node of headertemp to NULL, this will remove the node.
+    headertemp->next=NULL;
+    //Free temp
+    free(temp);
+    //Return new header
+	return header;
+
+}
+
+void insertAfter(struct node *afterNode, int data)
+{
+     // 1. Create node
+     struct node * temp = createNode(data);
+     // 2. Connect new node after the AfterNode
+     temp->next=afterNode->next;
+     // 3. Change the AfterNode pointer value so 
+     //that it points to the new node.
+     afterNode->next = temp;
+}
+
+struct node * insertBack(struct node *header, int data)
+{
+       // 1. Create node
+       struct node * temp = createNode(data);
+       struct node * headertemp;
+       // 2. Check if the list is empty
+       if (header == NULL)
+       {
+          header = temp;
+          return header;
+       }
+       // 3. Find the end of list
+       headertemp=header;
+
+       while(headertemp->next != NULL)
+            headertemp=headertemp->next;
+       // 4. Connect new node to the end of list.
+       headertemp->next = temp;
+       // 5. Return header
+       return header;
+}
+
+struct node * insertFront(struct node *header, int data)
+{
+     // 1. Create node
+     struct node * temp = createNode(data);
+     // 2. Connect new node to the front of the list
+     temp->next = header;
+     // 3. Change the header value so that it points 
+     // to the beginning of the LL.
+     header=temp;
+     // 4. Return new header
+     return header;
+}
+
+void display(struct node *header)
+{
+    if (header == NULL)
+        cout << "List is empty" << endl;
+        
+    struct node *temp = header;
+
+    while (temp != NULL)
+    {
+        cout << temp->data << " --> ";
+        temp=temp->next;
+    }
+    cout << endl;
+}
+
+int sizeofll(struct node *head)
+{
+	struct node *current = head;
+	int size = 0;
+	
+	while(current != NULL)
+	{
+		size++;
+		current = current->next;
+	}
+	return size;
+}
+
