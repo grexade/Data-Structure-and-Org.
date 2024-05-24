@@ -1,0 +1,225 @@
+#include <iostream>
+#include <cstdlib>
+#define N 10
+using namespace std;
+struct node
+{
+    int data;
+    struct node *next;
+};
+
+struct node *newnode(int);
+int isEmpty(struct node *);
+void displayList(struct node *);
+struct node *insertFront(struct node *, int);
+struct node *insertBack(struct node *, int);
+void insertAfter(struct node *, int);
+void deleteAfter(struct node *);
+struct node *deleteFront(struct node *);
+struct node *deleteBack(struct node *);
+void moveforwardlist(struct node *, struct node *);
+void movebackwardlist(struct node *, struct node *);
+void loadlist(struct node *, int[], int);
+
+int main(void)
+{
+    struct node *header = NULL;
+    cout << "task 1-->" << endl;
+    header = insertBack(header, 2);
+    header = insertBack(header, 4);
+    header = insertBack(header, 6);
+    header = insertBack(header, 8);
+    header = insertBack(header, 9);
+
+    displayList(header);
+    cout << endl;
+    cout << "moving a node forward" << endl;
+    moveforwardlist(header, header->next->next);
+    // 	displayList(header->next->next);
+
+    displayList(header);
+
+    movebackwardlist(header, header->next->next);
+    displayList(header);
+
+    cout << "load a list Function below -->" << endl;
+    int a[N] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 12};
+    loadlist(header, a, N);
+    displayList(header);
+
+    return 0;
+}
+
+int isEmpty(struct node *header)
+{
+    if (header == NULL)
+        return 1;
+    else
+        return 0;
+}
+
+struct node *newnode(int d)
+{
+    struct node *temp;
+    temp = (struct node *)malloc(sizeof(node));
+    temp->data = d;
+    temp->next = NULL;
+
+    return temp;
+}
+
+void displayList(struct node *head)
+{
+    struct node *current = head;
+
+    if (current == NULL)
+        cout << "The list is empty" << endl;
+
+    while (current != NULL)
+    {
+        cout << current->data << " -->";
+        current = current->next;
+    }
+    cout << endl;
+}
+
+struct node *insertFront(struct node *header, int data)
+{
+    struct node *temp;
+    temp = newnode(data);
+    temp->next = header;
+    header = temp;
+    return header;
+}
+
+struct node *insertBack(struct node *header, int data)
+{
+    struct node *temp, *last;
+    temp = newnode(data);
+
+    if (isEmpty(header))
+    {
+        header = temp;
+        return header;
+    }
+    last = header;
+    while (last->next != NULL)
+        last = last->next;
+
+    last->next = temp;
+
+    return header;
+}
+
+void insertAfter(struct node *afterNode, int data)
+{
+
+    struct node *temp = newnode(data);
+
+    temp->next = afterNode->next;
+
+    afterNode->next = temp;
+}
+
+void deleteAfter(struct node *afterNode)
+{
+    struct node *temp;
+
+    if (afterNode->next == NULL || afterNode == NULL)
+        return;
+
+    temp = afterNode->next;
+
+    afterNode->next = temp->next;
+    free(temp);
+}
+
+struct node *deleteFront(struct node *header)
+{
+
+    struct node *temp;
+
+    if (header == NULL)
+    {
+        return header;
+    }
+
+    temp = header;
+
+    header = header->next;
+
+    free(temp);
+
+    return header;
+}
+
+struct node *deleteBack(struct node *header)
+{
+
+    struct node *temp, *headertemp;
+
+    if (header == NULL)
+    {
+        return header;
+    }
+
+    headertemp = header;
+
+    while (headertemp->next->next != NULL)
+    {
+        headertemp = headertemp->next;
+    }
+
+    temp = headertemp->next;
+    headertemp->next = NULL;
+
+    free(temp);
+
+    return header;
+}
+
+void loadlist(struct node *header, int a[], int size)
+{
+    int i;
+    for (i = 0; i < size; i++)
+    {
+        insertBack(header, a[i]);
+    }
+}
+
+void moveforwardlist(struct node *headertemp, struct node *afternode)
+{
+    while (headertemp->next != afternode)
+        headertemp = headertemp->next;
+
+    struct node *temp;
+    temp = afternode->next->next;
+
+    headertemp->next = afternode->next;
+    afternode->next = temp;
+    headertemp->next->next = afternode;
+}
+
+void movebackwardlist(struct node *header, struct node *node_to_move)
+{
+    if (header == NULL || node_to_move == NULL || header == node_to_move)
+    {
+        cout << "Operation cannot be performed.";
+    }
+
+    struct node *prev = NULL;
+    struct node *temp = header;
+
+    while (temp != NULL && temp->next != node_to_move)
+    {
+        prev = temp;
+        temp = temp->next;
+    }
+
+    if (prev != NULL)
+    {
+        prev->next = node_to_move;
+    }
+    temp->next = node_to_move->next;
+    node_to_move->next = temp;
+}
