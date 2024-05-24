@@ -1,0 +1,239 @@
+#include <iostream>
+#include <cstdlib>
+using namespace std;
+
+struct node
+{
+    int data;
+    struct node *next;
+};
+
+struct node *createNode(int);
+struct node *insertBack(struct node *, int);
+struct node *insertFront(struct node *, int);
+void insertAfter(struct node *, int);
+void deleteAfter(struct node *);
+struct node *deleteFront(struct node *);
+struct node *deleteBack(struct node *);
+void displayList(struct node *);
+int sizeofll(struct node *);
+float averageList(struct node *);
+int countA(struct node *head);
+
+int main(void)
+{
+
+    // struct node *header = NULL;
+
+    // header = insertBack(header, 1);
+    // header = insertBack(header, 2);
+    // header = insertBack(header, 3);
+    // header = insertBack(header, 4);
+
+    // cout << "Original List: ";
+    // displayList(header);
+
+    struct node *header = NULL;
+
+    header = insertBack(header, 1.5);
+    header = insertBack(header, 2.5);
+    header = insertBack(header, 3.5);
+    header = insertBack(header, 4.5);
+
+    displayList(header);
+
+    cout << "Average of list elements: " << averageList(header) << endl;
+
+    //  struct node *header = NULL;
+
+    // header = insertBack(header, 'A');
+    // header = insertBack(header, 'B');
+    // header = insertBack(header, 'A');
+    // header = insertBack(header, 'C');
+    // header = insertBack(header, 'D');
+
+    // displayList(header);
+
+    // cout << "Number of 'A' grades: " << countA(header) << endl;
+
+    return 0;
+}
+
+int isEmpty(struct node *header)
+{
+    if (header == NULL)
+        return 1;
+    else
+        return 0;
+}
+
+struct node *createNode(int item)
+{
+    struct node *temp;
+    temp = (struct node *)malloc(sizeof(node));
+    temp->data = item;
+    temp->next = NULL;
+    return temp;
+}
+
+void deleteAfter(struct node *afterNode)
+{
+    struct node *temp;
+    // If next node of afterNode or afterNode is NULL,
+    // we cant remove anything
+    if (afterNode->next == NULL || afterNode == NULL)
+        return;
+    // Set temp to next node of afterNode
+    temp = afterNode->next;
+    // Set afterNode's next node to temp's next node.
+    afterNode->next = temp->next;
+    free(temp);
+}
+
+struct node *deleteFront(struct node *header)
+{
+    // Create temp node
+    struct node *temp;
+    // Check if the list is empty
+    if (header == NULL)
+    {
+        return header;
+    }
+    // Assign header to temp
+    temp = header;
+    // Point header, to next node
+    header = header->next;
+    // Free temp
+    free(temp);
+    // Return new header
+    return header;
+}
+
+struct node *deleteBack(struct node *header)
+{
+
+    struct node *temp, *headertemp;
+
+    if (header == NULL)
+    {
+        return header;
+    }
+
+    headertemp = header;
+
+    while (headertemp->next->next != NULL)
+    {
+        headertemp = headertemp->next;
+    }
+
+    temp = headertemp->next;
+    headertemp->next = NULL;
+
+    free(temp);
+
+    return header;
+}
+
+void insertAfter(struct node *afterNode, int data)
+{
+
+    struct node *temp = createNode(data);
+
+    temp->next = afterNode->next;
+
+    afterNode->next = temp;
+}
+
+struct node *insertBack(struct node *header, int data)
+{
+    struct node *temp, *last;
+    temp = createNode(data);
+
+    if (isEmpty(header))
+    {
+        header = temp;
+        return header;
+    }
+    last = header;
+    while (last->next != NULL)
+        last = last->next;
+
+    last->next = temp;
+
+    return header;
+}
+
+struct node *insertFront(struct node *header, int data)
+{
+
+    struct node *temp = createNode(data);
+
+    temp->next = header;
+
+    header = temp;
+
+    return header;
+}
+
+void displayList(struct node *header)
+{
+    if (header == NULL)
+        cout << "List is empty" << endl;
+
+    struct node *temp = header;
+
+    while (temp != NULL)
+    {
+        cout << temp->data << " --> ";
+        temp = temp->next;
+    }
+    cout << endl;
+}
+
+int sizeofll(struct node *head)
+{
+    struct node *current = head;
+    int size = 0;
+
+    while (current != NULL)
+    {
+        size++;
+        current = current->next;
+    }
+    return size;
+}
+
+float averageList(struct node *header)
+{
+    if (header == NULL)
+    {
+        return 0.0;
+    }
+    struct node *temp = header;
+    float sum = 0.0;
+    int count = 0;
+    while (temp != NULL)
+    {
+        sum += temp->data;
+        count++;
+        temp = temp->next;
+    }
+    return sum / count;
+}
+
+int countA(struct node *header)
+{
+    if (header == NULL)
+        return 0;
+
+    struct node *temp = header;
+    int count = 0;
+
+    while (temp != NULL)
+    {
+        if (temp->data == 'A')
+            count++;
+        temp = temp->next;
+    }
+    return count;
+}
